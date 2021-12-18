@@ -1,0 +1,41 @@
+service: express-lontec-fun1
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-2
+  lambdaHashingVersion: "20201221"
+
+functions:
+  app:
+    handler: index.handler
+    events:
+      - http:
+          path: /api/library/books
+          method: GET
+      - http:
+          path: /api/library/books/{uid}
+          method: GET
+      - http:
+          path: /api/library/books
+          method: POST
+      - http:
+          path: /api/library/books/{uid}
+          method: PUT
+      - http:
+          path: /api/library/books/{uid}
+          method: DELETE
+      - http:
+          path: /api/post/article
+          method: GET
+      - http:
+          path: /api/post/article
+          method: POST
+      
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
