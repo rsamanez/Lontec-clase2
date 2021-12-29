@@ -1,3 +1,5 @@
+const AWS = require('aws-sdk');
+AWS.config.update({region: "us-east-2"})
 const userRouter = require("express").Router();
 
 userRouter.route("/books")
@@ -10,20 +12,22 @@ userRouter.route("/books/:uid")
     .delete(remove);  // Delete a Book by id
 
     
-function index(req,res){
-    const bookList = [
-        {
-            "title" : "La Serpiente de Oro",
-            "author" : "Ciro Alegria",
-            "publicacion" : 1935
-        },
-        {
-            "title" : "La Ciudad de los Perros",
-            "author" : "Mario Vargas Llosa",
-            "publicacion" : 1963
-        }
-    ]
-    res.json(bookList);
+async function index(req,res){
+    const documentClient = AWS.DynamoDB.DocumentClient({region: "us-east-2"});
+    const params = {
+        TableName: "Library"
+    }
+    try{
+        documentClient.scan(params, function (err,data){
+            if (err){
+                console.log(err, err.stack);
+            }else{
+                res.json(data)
+            }
+        });
+    } catch (err){
+        console.log(err);
+    }
 }
 
 function store(req,res){
