@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+console.log(AWS.VERSION);
 AWS.config.update({region: "us-east-2"})
 const userRouter = require("express").Router();
 
@@ -7,15 +8,15 @@ userRouter.route("/books")
     .post(store); // Greate a New Book
 
 userRouter.route("/books/:uid")
-    .get(show)  // Get One Book by ID
+    .get(show)  // Get One Book by IDs
     .put(update) // Update a Book by Id
     .delete(remove);  // Delete a Book by id
 
     
-async function index(req,res){
-    const documentClient = AWS.DynamoDB.DocumentClient({region: "us-east-2"});
+function index(req,res){
+    const documentClient = new AWS.DynamoDB.DocumentClient({region: "us-east-2"});
     const params = {
-        TableName: "Library"
+        TableName: "LibraryTable"
     }
     try{
         documentClient.scan(params, function (err,data){

@@ -1,4 +1,4 @@
-service: express-lontec-fun1
+service: express-lontec-fun2
 
 provider:
   name: aws
@@ -6,6 +6,12 @@ provider:
   stage: dev
   region: us-east-2
   lambdaHashingVersion: "20201221"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-east-2:284507394080:table/LibraryTable
 
 functions:
   app:
