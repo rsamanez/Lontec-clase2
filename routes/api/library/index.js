@@ -1,7 +1,8 @@
 const AWS = require('aws-sdk');
-console.log(AWS.VERSION);
+const { v4 } = require("uuid");
 AWS.config.update({region: "us-east-2"})
 const userRouter = require("express").Router();
+const documentClient = new AWS.DynamoDB.DocumentClient({region: "us-east-2"});
 
 userRouter.route("/books")
     .get(index)  // Get All Books
@@ -14,7 +15,7 @@ userRouter.route("/books/:uid")
 
     
 function index(req,res){
-    const documentClient = new AWS.DynamoDB.DocumentClient({region: "us-east-2"});
+    
     const params = {
         TableName: "LibraryTable"
     }
@@ -32,57 +33,94 @@ function index(req,res){
 }
 
 function store(req,res){
-    res.json({requestBody: req.body}) 
+    const { title, author, publicacion } = req.body;
+    const id = v4();
+    const newBook = {
+       id,
+       title,
+       author,
+       publicacion
+      };
+      const params = {
+          TableName: "LibraryTable",
+          Item: newBook
+      }
+      try{
+          documentClient.put(params, function (err){
+              if (err){
+                  console.log(err, err.stack);
+              }else{
+                  res.json(newBook)
+              }
+          });
+      } catch (err){
+          console.log(err);
+      }
 }
 
 function show(req,res){
-    const bookList = [
-        {
-            "title" : "La Serpiente de Oro",
-            "author" : "Ciro Alegria",
-            "publicacion" : 1935
-        },
-        {
-            "title" : "La Ciudad de los Perros",
-            "author" : "Mario Vargas Llosa",
-            "publicacion" : 1963
-        }
-    ]
-    res.json(bookList[req.params.uid]);
+    const id = req.params.uid;
+    const params = {
+        TableName: "LibraryTable",
+        Key: { id }
+    }
+    try{
+        documentClient.get(params, function (err,data){
+            if (err){
+                console.log(err, err.stack);
+            }else{
+                res.json(data)
+            }
+        });
+    } catch (err){
+        console.log(err);
+    }
 }
 
 function update(req,res){
-    const bookList = [
-        {
-            "title" : "La Serpiente de Oro",
-            "author" : "Ciro Alegria",
-            "publicacion" : 1935
-        },
-        {
-            "title" : "La Ciudad de los Perros",
-            "author" : "Mario Vargas Llosa",
-            "publicacion" : 1963
-        }
-    ]
-    bookList[req.params.uid] = req.body;
-    res.json(bookList);
+    const id = req.params.uid;
+    const { title, author, publicacion } = req.body;
+    const params = {
+      TableName: "LibraryTable",
+      Key: { id },
+      UpdateExpression: "set title = :title, author = :author, publicacion = :publicacion ",
+      ExpressionAttributeValues: {
+        ":title": title,
+        ":author": author,
+        ":publicacion": publicacion
+      },
+      ReturnValues: "ALL_NEW",
+    }
+    try{
+        documentClient.update(params, function (err, data){
+            if (err){
+                console.log(err, err.stack);
+            }else{
+                res.json(data)
+            }
+        });
+    } catch (err){
+        console.log(err);
+    }
 }
 
 function remove(req,res){
-    const bookList = [
-        {
-            "title" : "La Serpiente de Oro",
-            "author" : "Ciro Alegria",
-            "publicacion" : 1935
-        },
-        {
-            "title" : "La Ciudad de los Perros",
-            "author" : "Mario Vargas Llosa",
-            "publicacion" : 1963
-        }
-    ]
-    bookList.splice(req.params.uid, 1);
-    res.json(bookList);
+    const id = req.params.uid;
+    const params = {
+        TableName: "LibraryTable",
+        Key: { id }
+    }
+    try{
+        documentClient.delete(params, function (err){
+            if (err){
+                console.log(err, err.stack);
+            }else{
+                res.json({id,removed:"OK"})
+            }
+        });
+    } catch (err){
+        console.log(err);
+    }
 }
 
 
