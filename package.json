@@ -17,6 +17,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "serverless-offline": "^8.3.1"
+    "serverless-offline": "^8.3.1",
+    "serverless-puresec-cli": "^1.2.1"
   }
 }

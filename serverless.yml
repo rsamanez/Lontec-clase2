@@ -1,17 +1,17 @@
-service: express-lontec-fun2
+service: wa-api-v1
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   stage: dev
-  region: us-east-2
+  region: us-east-1
   lambdaHashingVersion: "20201221"
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:*
       Resource:
-        - arn:aws:dynamodb:us-east-2:284507394080:table/LibraryTable
+        - arn:aws:dynamodb:us-east-1:890827230719:table/LibraryTable
 
 functions:
   app:
@@ -32,12 +32,7 @@ functions:
       - http:
           path: /api/library/books/{uid}
           method: DELETE
-      - http:
-          path: /api/post/article
-          method: GET
-      - http:
-          path: /api/post/article
-          method: POST
+
 
 resources:
   Resources:
@@ -55,6 +50,7 @@ resources:
 
 plugins:
   - serverless-offline
+  - serverless-puresec-cli
 
 custom:
   serverless-offline:
