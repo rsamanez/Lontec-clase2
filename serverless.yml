@@ -11,7 +11,8 @@ provider:
       Action:
         - dynamodb:*
       Resource:
-        - arn:aws:dynamodb:us-east-1:890827230719:table/LibraryTable
+        - arn:aws:dynamodb:us-east-1:accountId:table/LibraryTable
+        - arn:aws:dynamodb:us-east-1:accountId:table/Cleaners
 
 functions:
   app:
@@ -20,19 +21,47 @@ functions:
       - http:
           path: /api/library/books
           method: GET
+          cors: true
       - http:
           path: /api/library/books/{uid}
           method: GET
+          cors: true
       - http:
           path: /api/library/books
           method: POST
+          cors: true
       - http:
           path: /api/library/books/{uid}
           method: PUT
+          cors: true
       - http:
           path: /api/library/books/{uid}
           method: DELETE
-
+          cors: true
+      - http:
+          path: /api/wac/cleaners
+          method: GET
+          cors: true
+      - http:
+          path: /api/wac/cleaners/{uid}
+          method: GET
+          cors: true
+      - http:
+          path: /api/wac/cleaners
+          method: POST
+          cors: true
+      - http:
+          path: /api/wac/cleaners/{uid}
+          method: PUT
+          cors: true
+      - http:
+          path: /api/wac/cleaners/{uid}
+          method: DELETE
+          cors: true
+      - http:
+          path: /api/wac/new-cleaners
+          method: GET
+          cors: true
 
 resources:
   Resources:
@@ -46,6 +75,65 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: id
+            KeyType: HASH
+    CleanersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Cleaners
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: wixMemberId
+            AttributeType: S
+          - AttributeName: name
+            AttributeType: S
+          - AttributeName: phoneNumber
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+          - AttributeName: rating
+            AttributeType: N
+          - AttributeName: ratingQ
+            AttributeType: N
+          - AttributeName: stripe
+            AttributeType: BOOL
+          - AttributeName: sterling
+            AttributeType: BOOL
+          - AttributeName: myTeams
+            AttributeType: BOOL
+          - AttributeName: myTeamsDefault
+            AttributeType: BOOL
+          - AttributeName: businessName
+            AttributeType: S
+          - AttributeName: phone
+            AttributeType: S
+          - AttributeName: address1
+            AttributeType: S
+          - AttributeName: address2
+            AttributeType: S
+          - AttributeName: city
+            AttributeType: S
+          - AttributeName: stateCode
+            AttributeType: S
+          - AttributeName: stateName
+            AttributeType: S
+          - AttributeName: postalCode
+            AttributeType: S
+          - AttributeName: lat
+            AttributeType: N
+          - AttributeName: lng
+            AttributeType: N
+          - AttributeName: status
+            AttributeType: S
+          - AttributeName: subscription
+            AttributeType: S
+          - AttributeName: enable
+            AttributeType: BOOL
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: email
             KeyType: HASH
 
 plugins:

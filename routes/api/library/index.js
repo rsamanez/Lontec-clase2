@@ -5,9 +5,9 @@ const { newBookValidation } = require('./validator.js')
 
 
 const { v4 } = require("uuid");
-AWS.config.update({region: "us-east-2"})
+AWS.config.update({region: "us-east-1"})
 const userRouter = require("express").Router();
-const documentClient = new AWS.DynamoDB.DocumentClient({region: "us-east-2"});
+const documentClient = new AWS.DynamoDB.DocumentClient({region: "us-east-1"});
 
 userRouter.route("/books")
     .get(index)  // Get All Books
