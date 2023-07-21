@@ -11,11 +11,11 @@ const documentClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 
 const TABLE_NAME = "Cleaners";
 
-userRouter.route("/wac")
+userRouter.route("/cleaners")
     .get(index)  // Get All Cleaners
     .post(cleanerValidation, store); // Create a New Cleaner
 
-userRouter.route("/wac/:uid")
+userRouter.route("/cleaners/:uid")
     .get(show)  // Get One Cleaner by IDs
     .put(update) // Update a Cleaner by Id
     .delete(remove);  // Delete a Cleaner by id

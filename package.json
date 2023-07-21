@@ -1,5 +1,5 @@
 {
-  "name": "lambda_api",
+  "name": "wa-api-v1",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,12 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "rsamanez@gmail.com",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1048.0",
+    "bcryptjs": "^2.4.3",
+    "dynamodb-toolbox": "^0.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.14.0",
+    "jsonwebtoken": "^9.0.1",
     "serverless-http": "^2.7.0",
     "uuid": "^8.3.2"
   },

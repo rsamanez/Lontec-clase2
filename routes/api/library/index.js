@@ -55,6 +55,7 @@ function store(req,res){
             TableName: "LibraryTable",
             Item: newBook
         }
+        console.log("PARAMS:", params)
         try{
             documentClient.put(params, function (err){
                 if (err){

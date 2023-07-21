@@ -2,7 +2,7 @@ const { check, oneOf } = require('express-validator');
 
 exports.cleanerValidation = [
     check('wixMemberId','wixMemberId is required').exists().isUUID(),
-    check('name','Cleaner name is required').exists(),
+    check('cleanerName','Cleaner cleanerName is required').exists(),
     check('phoneNumber','Cleaner phoneNumber is required').exists().isMobilePhone(),
     check('email','Cleaner email is required').exists().trim().isEmail(),
     check('businessName','Cleaner businessName is required').exists(),
@@ -17,10 +17,10 @@ exports.cleanerValidation = [
 exports.setUpdateCleanerValues = (body) => {
     let updExpression = 'set';
     let attributeValues = null;
-    if('name' in body){
-        updExpression = `${updExpression} name = :name`;
+    if('cleanerName' in body){
+        updExpression = `${updExpression} cleanerName = :cleanerName`;
         attributeValues = {
-            ':name' : body.name
+            ':cleanerName' : body.cleanerName
         };
     }
     if('phoneNumber' in body){
